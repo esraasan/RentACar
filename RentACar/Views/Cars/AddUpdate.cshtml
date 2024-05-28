@@ -13,32 +13,32 @@
 				</div>
 
 				<div class="mb-3">
-					<label asp-for="CarBrandName" class="form-label">Car Brand</label>
-					<select asp-for="CarBrandName" asp-items="ViewBag.CarBrandList" class="form-select">
-					</select>
+					<label asp-for="CarBrandName" class="form-label">Brand</label>
+					<input asp-for="CarBrandName" type="text"  class="form-control"/>
+					<span asp-validation-for="CarBrandName" class="text-danger"></span>
 				</div>
 				<div class="mb-3">
-					<label asp-for="CarName" class="form-label">Car Name</label>
+					<label asp-for="CarName" class="form-label">Name</label>
 					<input asp-for="CarName" type="text" class="form-control" />
 					<span asp-validation-for="CarName" class="text-danger"></span>
 				</div>
 				<div class="mb-3">
-					<label asp-for="CarKm" class="form-label">Car Km</label>
+					<label asp-for="CarKm" class="form-label">Km</label>
 					<input asp-for="CarKm" type="text" class="form-control" />
 					<span asp-validation-for="CarKm" class="text-danger"></span>
 				</div>
 				<div class="mb-3">
-					<label asp-for="CarFuel" class="form-label">Car Fuel</label>
+					<label asp-for="CarFuel" class="form-label">Fuel</label>
 					<input asp-for="CarFuel" type="text" class="form-control" />
 					<span asp-validation-for="CarFuel" class="text-danger"></span>
 				</div>
 				<div class="mb-3">
-					<label asp-for="CarPrice" class="form-label">Money</label>
+					<label asp-for="CarPrice" class="form-label">Price</label>
 					<input asp-for="CarPrice" type="text" class="form-control" />
 					<span asp-validation-for="CarPrice" class="text-danger"></span>
 				</div>
 				<div class="mb-3">
-					<label asp-for="ImgUrl" class="p-0"></label>
+					<label asp-for="ImgUrl" class="p-0">Img</label>
 					<input type="file" name="file" class="form-control" />
 				</div>
 

@@ -1,0 +1,54 @@
+﻿ @model Users
+
+<form method="post">
+    <div class="row">
+        <div class="border p-3 mt-5">
+            <div class="row pb-3">
+
+                <h1 class="text-warning">@(Model == null ? "Add User" : "Update User")</h1><hr />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Name"> Name</label>
+                <input asp-for="Name" type="text" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Surname">User Surname</label>
+                <input asp-for="Surname" type="text" class="form-control" />
+                <span asp-validation-for="Surname" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Email">User Email</label>
+                <input asp-for="Email" type="email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Password">User Password</label>
+                <input asp-for="Password" type="password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="PhoneNumber">Phone</label>
+                <input asp-for="PhoneNumber" type="text" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div> <div class="mb-3">
+                <label asp-for="Address">Address</label>
+                <input asp-for="Address" type="text" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+      
+
+            @if (Model != null)
+            {
+                <button type="submit" class="btn btn-outline-warning">Update User</button>
+            }
+            else
+            {
+                <button type="submit" class="btn btn-outline-warning">Add User</button>
+            }
+            <a asp-controller="Users" asp-action="Index" class="btn btn-outline-warning">Back</a>
+        </div>
+    </div>
+</form>
+

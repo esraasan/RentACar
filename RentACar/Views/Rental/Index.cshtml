@@ -1,0 +1,70 @@
+﻿@model List<Rental>
+
+@{
+    ViewData["Title"] = "Rental";
+}
+
+@if (TempData["basarili"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        @TempData["basarili"]
+    </div>
+}
+
+<div class="container">
+    <div class="row pt-3 rb-4">
+        <div>
+            <h1>@ViewData["Title"]</h1>
+        </div>
+    </div>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    Id
+                </th>
+                <th>
+                    User
+                </th>
+                <th>
+                    Car Name
+                </th>
+                <th>
+                    Car Brand
+                </th>
+                <th>
+                    Start Date
+                </th>
+                <th>
+                    End Date
+                </th>
+                <th></th>
+                <th></th>
+            </tr>
+
+        </thead>
+        <tbody>
+            @foreach (var rent in Model)
+            {
+                <tr>
+                    <td>@rent.Id</td>
+                    <td>@rent.User.Name</td>
+                    <td>@rent.Car.CarName</td>
+                    <td>@rent.CarBrandName</td>
+                    <td>@rent.StartDate</td>
+                    <td>@rent.EndDate</td>
+                    <td><a asp-controller="Rental" asp-action="AddUpdate" asp-route-id="@rent.Id" type="button" class="btn btn-success" style="width:150px;">Update</a></td> <!--asp-route-id=idyi bulur-->
+                    <td><a asp-controller="Rental" asp-action="Delete" asp-route-id="@rent.Id" type="button" class="btn btn-danger" style="width:150px;">Delete</a></td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="row pt-3 pb-2">
+        <div>
+            <a asp-controller="Rental" asp-action="AddUpdate" class="btn btn-lg btn-primary" type="button">
+                Add new rent
+            </a>
+        </div>
+    </div>
+</div>

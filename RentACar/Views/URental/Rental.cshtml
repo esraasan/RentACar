@@ -1,0 +1,12 @@
+﻿@model List<URent>
+
+@{
+    ViewData["Title"] = "Rental";
+}
+
+@if (TempData["basarili"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        @TempData["basarili"]
+    </div>
+}

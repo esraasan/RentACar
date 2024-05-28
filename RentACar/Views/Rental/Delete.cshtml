@@ -1,6 +1,6 @@
-﻿@model Cars
+﻿@model Rental
 @{
-    ViewData["Title"] = "Delete Car";
+    ViewData["Title"] = "Delete Rent";
 }
 
 
@@ -17,16 +17,16 @@
             <span asp-validation-for="CarBrandName" class="text-danger"></span>
         </div>
         <div class="mb-3">
-            <label asp-for="CarName" class="form-label">Car Name</label>
-            <input asp-for="CarName" disabled class="form-control" />
-            <span asp-validation-for="CarName" class="text-danger"></span>
+            <label asp-for="CarId" class="form-label">Car Name</label>
+            <input asp-for="CarId" disabled class="form-control" />
+            <span asp-validation-for="CarId" class="text-danger"></span>
         </div>
         <div class="row">
             <div class="col-md-6 mb-3">
                 <button type="submit" class="btn btn-lg btn-primary" style="width:100%">Delete</button>
             </div>
             <div class="col-md-6 mb-3">
-                <a asp-controller="Cars" asp-action="Index" class="btn btn-lg btn-primary" style="width:100%">
+                <a asp-controller="Rental" asp-action="Index" class="btn btn-lg btn-primary" style="width:100%">
                     Back
                 </a>
             </div>

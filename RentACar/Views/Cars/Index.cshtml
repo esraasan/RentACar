@@ -39,13 +39,16 @@
                     Price
                 </th>
                 <th>
+                    IsActive
+                </th>
+                <th>
                     Img
                 </th>
             </tr>
     
         </thead>
         <tbody>  
-          @*   @foreach (var cars in Model)
+            @foreach (var cars in Model)
             {
                 <tr>
                     <td>@cars.Id</td>
@@ -54,12 +57,13 @@
                     <td>@cars.CarKm</td>
                     <td>@cars.CarFuel</td>
                     <td>@cars.CarPrice</td>
+                    <td>@cars.IsActive</td>
                     <td>@cars.ImgUrl</td>
-                    <td><a asp-controller="Cars" asp-action="AddUpdate" asp-route-id="@car.Id" type="button" class="btn btn-success" style="width:150px;">Update</a></td> <!--asp-route-id=idyi bulur-->
-                    <td><a asp-controller="Cars" asp-action="Delete" asp-route-id="@car.Id" type="button" class="btn btn-danger" style="width:150px;">Delete</a></td>
+                    <td><a asp-controller="Cars" asp-action="AddUpdate" asp-route-id="@cars.Id" type="button" class="btn btn-success" style="width:150px;">Update</a></td> <!--asp-route-id=idyi bulur-->
+                    <td><a asp-controller="Cars" asp-action="Delete" asp-route-id="@cars.Id" type="button" class="btn btn-danger" style="width:150px;">Delete</a></td>
 
                 </tr>
-            } *@
+            }
         </tbody>
     </table>
     <div class="row pt-3 pb-2">

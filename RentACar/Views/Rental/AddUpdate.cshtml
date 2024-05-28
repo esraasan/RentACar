@@ -1,0 +1,67 @@
+﻿@model RentACar.Models.Rental
+
+<form asp-action="AddUpdate" method="post" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-10">
+            <div class="border p-3 mt-5">
+                <div class="row pb-3">
+                    <h2 class="text-primary">@(Model == null ? "Update" : "Add ")</h2>
+                    <hr />
+                </div>
+                <div class="mb-3">
+                    <label asp-for="CarBrandName"></label>
+                    <select asp-for="CarBrandName" class="form-control" >
+                        <option value="">Select a brand</option>
+                        @foreach (var item in ViewBag.Brands)
+                        {
+                            <option value="@item.Text">@item.Text</option>
+                        }
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="CarId"></label>
+                    <select asp-for="CarId" class="form-control">
+                        <option value="">Select a car</option>
+                        @foreach (var item in ViewBag.Cars)
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="UserId"></label>
+                    <select asp-for="UserId" class="form-control">
+                        <option value="">Select a user</option>
+                        @foreach (var item in ViewBag.Users)
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="StartDate"></label>
+                    <input asp-for="StartDate" class="form-control" />
+                </div>
+                <div class="mb-3">
+                    <label asp-for="EndDate"></label>
+                    <input asp-for="EndDate" class="form-control" />
+                </div>
+
+                @if (Model == null)
+                {
+                    <button type="submit" class="btn btn-lg btn-primary" style="width:250px">Update</button>
+                }
+                else
+                {
+                    <button type="submit" class="btn btn-lg btn-primary" style="width:250px">Add </button>
+                }
+
+                <a asp-controller="Rental" asp-action="Index" class="btn btn-lg btn-primary" style="width:250px">
+                    Back
+                </a>
+            </div>
+        </div>
+    </div>
+</form>
+
+
