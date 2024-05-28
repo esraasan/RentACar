@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.AspNetCore.Mvc.Rendering;
 using RentACar.Data;
 using RentACar.Models;
 
@@ -20,6 +21,10 @@ namespace RentACar.Repository
         public void Save()
         {
             _appDbContext.SaveChanges();
+        }
+        public IEnumerable<Cars> GetAllCars()
+        {
+            return _appDbContext.Cars.ToList();
         }
     }
 }

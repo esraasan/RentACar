@@ -1,0 +1,52 @@
+﻿<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+@model IEnumerable<RentACar.Models.Cars>
+@{
+    ViewData["Title"] = "Rental";
+}
+
+<style>
+    .card-img-top {
+        width: 100%;
+        height: 200px;
+        object-fit: cover; 
+    }
+</style>
+
+@if (Model.Any())
+{
+    <div class="row">
+        <h1>@ViewData["Title"]</h1>
+        @foreach (var car in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="@car.ImgUrl" class="card-img-top" alt="@car.CarName">
+                    <div class="card-body">
+                        <h5 class="card-title">@car.CarName</h5>
+                        <p class="card-text">
+                            <strong>Brand:</strong> @car.CarBrandName<br>
+                            <strong>KM:</strong> @car.CarKm<br>
+                            <strong>Fuel:</strong> @car.CarFuel<br>
+                            <strong>Price:</strong> @car.CarPrice<br>
+                        </p>
+                        @if (!User.Identity.IsAuthenticated)
+                        {
+                            <a asp-controller="Users" asp-action="Login" asp-route-id="@car.Id" type="button" class="btn btn-lg btn-primary" style="width:150px;">Rent</a>
+                        }
+                        else
+                        {
+
+                            <a asp-controller="URent" asp-action="RentCar" asp-route-carId="@car.Id" type="button" class="btn btn-lg btn-primary" style="width:150px;">Rent</a>
+                          
+                        }
+                       
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p>No cars available for rent.</p>
+}

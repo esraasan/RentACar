@@ -21,7 +21,7 @@ namespace RentACar.Controllers
             _usersRepository = usersRepository;
         }
 
-        [Authorize]
+        [Authorize(Policy = "AdminPolicy")]
         public IActionResult Index()
         {
             var rent = _rentalRepository.GetAll(includeProperties: "Cars,Users").ToList();
@@ -61,7 +61,7 @@ namespace RentACar.Controllers
 
             return Json(cars);
         }
-        [Authorize]
+        [Authorize(Policy = "AdminPolicy")]
         public IActionResult AddUpdate(int? id)
         {
             SetViewBags();
@@ -82,7 +82,7 @@ namespace RentACar.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Policy = "AdminPolicy")]
         public IActionResult AddUpdate(Rental rent)
         {
             if (ModelState.IsValid)
@@ -112,7 +112,7 @@ namespace RentACar.Controllers
             return View(rent);
         }
 
-        [Authorize]
+        [Authorize(Policy = "AdminPolicy")]
         public IActionResult Delete(int? id)
         {
             if (id == null || id == 0)
@@ -130,7 +130,7 @@ namespace RentACar.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
-        [Authorize]
+        [Authorize(Policy = "AdminPolicy")]
         public IActionResult DeletePost(int id)
         {
             var rent = _rentalRepository.Get(r => r.Id == id);

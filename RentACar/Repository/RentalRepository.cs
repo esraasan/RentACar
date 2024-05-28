@@ -28,14 +28,5 @@ namespace RentACar.Repository
            
         }
 
-        public object GetAll(int value, string includeProperties)
-        {
-            throw new NotImplementedException();
-        }
-
-        public object GetAllRents(int value, string includeProperties)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

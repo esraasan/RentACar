@@ -11,6 +11,6 @@ namespace RentACar.Data
         public DbSet<Users> Users { get; set; }
         public DbSet<Rental> Rentals { get; set; }
         public DbSet<URent> URent { get; set; }
-
+        public IEnumerable<object> URents { get; internal set; }
     }
 }
