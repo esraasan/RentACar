@@ -28,20 +28,20 @@
                         @if (User.Claims.FirstOrDefault(c => c.Type == "type")?.Value == "Admin")
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Rental" asp-action="Index">Rental</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Rental" asp-action="Index">Rent List</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">User List</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Cars" asp-action="Index">Cars</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Cars" asp-action="Index">Car List</a>
                             </li>
                         }
                         @if (User.Claims.FirstOrDefault(c => c.Type == "type")?.Value == "Standart")
                         {
-                           @*  <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="URent" asp-action="Index">Rental</a>
-                            </li> *@
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="URent" asp-action="RentList">Rent List</a>
+                            </li>
                         }
                     </ul>
                     <ul class="navbar-nav ms-auto">

@@ -3,23 +3,24 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using RentACar.Models;
 using RentACar.Repository;
-using System.Security.Claims;
+using System;
+using System.Linq;
 
 namespace RentACar.Controllers
 {
     public class URentController : Controller
     {
-        private readonly IURentRepository _urentRepository;
+        private readonly IRentalRepository _rentalRepository;
         private readonly ICarsRepository _carsRepository;
         private readonly IUsersRepository _usersRepository;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public URentController(IURentRepository urentRepository, ICarsRepository carsRepository, IUsersRepository usersRepository, IWebHostEnvironment webHostEnvironment)
+        public URentController(IRentalRepository rentalRepository, ICarsRepository carsRepository, IUsersRepository usersRepository, IWebHostEnvironment webHostEnvironment)
         {
-            _urentRepository = urentRepository;
+            _rentalRepository = rentalRepository;
             _carsRepository = carsRepository;
             _usersRepository = usersRepository;
-            _webHostEnvironment = webHostEnvironment;   
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public IActionResult Index()
@@ -27,25 +28,30 @@ namespace RentACar.Controllers
             var cars = _carsRepository.GetAllCars();
             return View(cars);
         }
+
         public IActionResult RentCar(int carId)
         {
-            ViewBag.CarId = carId;
-            return View();
-        }
-        [HttpPost]
-        [Authorize(Policy = "UserPolicy")]
-       public IActionResult RentCar(int carId, DateTime StartDate, DateTime EndDate)
-
-        {
-            var userIdClaim = HttpContext.User.FindFirst("userId")?.Value;
-            if (userIdClaim == null)
+            var car = _carsRepository.Get(c => c.Id == carId);
+            if (car == null)
             {
-                return Unauthorized();
+                return NotFound();
             }
 
-            if (!int.TryParse(userIdClaim, out int userId))
+            ViewBag.CarId = carId;
+            ViewBag.CarName = car.CarName;
+            ViewBag.CarBrandName = car.CarBrandName;
+
+            return View();
+        }
+
+        [HttpPost]
+        [Authorize(Policy = "UserPolicy")]
+        public IActionResult RentCar(int carId, DateTime StartDate, DateTime EndDate)
+        {
+            var userIdClaim = HttpContext.User.FindFirst("userId")?.Value;
+            if (userIdClaim == null || !int.TryParse(userIdClaim, out int userId))
             {
-                return BadRequest("Invalid user ID.");
+                return Unauthorized();
             }
 
             var car = _carsRepository.Get(c => c.Id == carId);
@@ -54,20 +60,112 @@ namespace RentACar.Controllers
                 return NotFound();
             }
 
-            var urental = new URent
+            var urental = new Rental
             {
                 CarId = car.Id,
-                CarBrandName=car.CarBrandName,
+                CarName = car.CarName,
+                CarBrandName = car.CarBrandName,
                 UserId = userId,
                 StartDate = StartDate,
                 EndDate = EndDate
             };
 
-            _urentRepository.Add(urental);
-            _urentRepository.Save();
+            _rentalRepository.Add(urental);
+            _rentalRepository.Save();
 
             TempData["Success"] = "Car rented successfully!";
-            return RedirectToAction("Index");
+            return RedirectToAction("RentList");
+        }
+
+        [Authorize(Policy = "UserPolicy")]
+        public IActionResult RentList()
+        {
+            var userIdClaim = HttpContext.User.FindFirst("userId")?.Value;
+            if (userIdClaim == null || !int.TryParse(userIdClaim, out int userId))
+            {
+                return Unauthorized();
+            }
+
+            var userRentals = _rentalRepository.GetAll().Where(r => r.UserId == userId).ToList();
+            return View(userRentals);
+        }
+        [Authorize(Policy = "UserPolicy")]
+        public IActionResult Update(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return View(new Rental());
+            }
+            else
+            {
+                var rent = _rentalRepository.Get(r => r.Id == id);
+                if (rent == null)
+                {
+                    return NotFound();
+                }
+                return View(rent);
+
+            }
+
+        }
+
+      
+        [HttpPost]
+        [Authorize(Policy = "UserPolicy")]
+        public IActionResult Update(Rental rent)
+        {
+            if (ModelState.IsValid)
+            {
+                var existingRental = _rentalRepository.Get(r => r.Id == rent.Id);
+                if (existingRental == null)
+                {
+                    return NotFound();
+                }
+
+                existingRental.StartDate = rent.StartDate;
+                existingRental.EndDate = rent.EndDate;
+
+                _rentalRepository.Update(existingRental);
+                TempData["basarili"] = "The rental transaction was successfully completed.";
+                _rentalRepository.Save();
+                return RedirectToAction("RentIndex");
+            }
+            return View(rent);
+        }
+
+
+
+        [Authorize(Policy = "UserPolicy")]
+        public IActionResult Delete(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+
+            var rent = _rentalRepository.Get(r => r.Id == id, includeProperties: "Car");
+            if (rent == null)
+            {
+                return NotFound();
+            }
+
+            return View(rent);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [Authorize(Policy = "UserPolicy")]
+        public IActionResult DeletePost(int id)
+        {
+            var rent = _rentalRepository.Get(r => r.Id == id);
+            if (rent == null)
+            {
+                return NotFound();
+            }
+
+            _rentalRepository.Delete(rent);
+            _rentalRepository.Save();
+            TempData["basarili"] = "The deletion was successfully completed.";
+            return RedirectToAction("RentList");
         }
     }
 }

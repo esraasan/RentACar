@@ -14,7 +14,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<ICarsRepository, CarsRepository>();
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();
 builder.Services.AddScoped<IRentalRepository, RentalRepository>();
-builder.Services.AddScoped<IURentRepository, URentRepository>();
+
 
 
 

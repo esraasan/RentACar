@@ -10,7 +10,6 @@ namespace RentACar.Data
         public DbSet<Cars> Cars { get; set; }
         public DbSet<Users> Users { get; set; }
         public DbSet<Rental> Rentals { get; set; }
-        public DbSet<URent> URent { get; set; }
         public IEnumerable<object> URents { get; internal set; }
     }
 }

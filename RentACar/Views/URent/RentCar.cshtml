@@ -1,31 +1,55 @@
-﻿@model RentACar.Models.URent
+﻿@model RentACar.Models.Rental
 
+@{
+    ViewData["Title"] = "Rent Car";
+}
 
+<div class="container mt-5">
+    <h2 class="mb-4">Rent Car</h2>
 
-<h2>Rent Car</h2>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form asp-action="RentCar" method="post" enctype="multipart/form-data">
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" name="carId" value="@ViewBag.CarId" />
 
-<div>
-    <form asp-action="RentCar" method="post" enctype="multipart/form-data">
-        <input type="hidden" asp-for="Id" />
-       
-        <div class="form-group">
-            <label asp-for="StartDate" class="control-label"></label>
-            <input type="date" name="StartDate" class="form-control" />
-            <span asp-validation-for="StartDate" class="text-danger"></span>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Car Name:</label>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control" value="@ViewBag.CarName" disabled />
+                    </div>
+                </div>
+                <br />
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Car Brand:</label>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control" value="@ViewBag.CarBrandName" disabled />
+                    </div>
+                </div>
+                <br />
+                <div class="form-group row">
+                    <label asp-for="StartDate" class="col-sm-2 col-form-label control-label">Start Date</label>
+                    <div class="col-sm-6">
+                        <input asp-for="StartDate" type="datetime-local" class="form-control" />
+                        <span asp-validation-for="StartDate" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row mt-3">
+                    <label asp-for="EndDate" class="col-sm-2 col-form-label control-label">End Date</label>
+                    <div class="col-sm-6">
+                        <input asp-for="EndDate" type="datetime-local" class="form-control" />
+                        <span asp-validation-for="EndDate" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row mt-4">
+                    <div class="col-sm-10 offset-sm-2">
+                        <button type="submit" class="btn btn-primary mr-2">Rent</button>
+                        <a asp-action="Index" class="btn btn-secondary">Back</a>
+                    </div>
+                </div>
+            </form>
         </div>
-
-        <div class="form-group">
-            <label asp-for="EndDate" class="control-label"></label>
-            <input type="date" name="EndDate" class="form-control" />
-            <span asp-validation-for="EndDate" class="text-danger"></span>
-        </div>
-        <input type="hidden" name="carId" value="@ViewBag.CarId"/>
-        <div class="form-group">
-            <input type="submit" value="Rent" class="btn btn-primary" />
-        </div>
-    </form>
-</div>
-
-<div>
-    <a asp-action="Index">Back</a>
+    </div>
 </div>

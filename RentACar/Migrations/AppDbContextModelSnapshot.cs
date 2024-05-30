@@ -75,6 +75,10 @@ namespace RentACar.Migrations
                     b.Property<int>("CarId")
                         .HasColumnType("int");
 
+                    b.Property<string>("CarName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
@@ -91,39 +95,6 @@ namespace RentACar.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Rentals");
-                });
-
-            modelBuilder.Entity("RentACar.Models.URent", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CarBrandName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("CarId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CarId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("URent");
                 });
 
             modelBuilder.Entity("RentACar.Models.Users", b =>
@@ -173,25 +144,6 @@ namespace RentACar.Migrations
                 });
 
             modelBuilder.Entity("RentACar.Models.Rental", b =>
-                {
-                    b.HasOne("RentACar.Models.Cars", "Car")
-                        .WithMany()
-                        .HasForeignKey("CarId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("RentACar.Models.Users", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Car");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("RentACar.Models.URent", b =>
                 {
                     b.HasOne("RentACar.Models.Cars", "Car")
                         .WithMany()

@@ -1,0 +1,38 @@
+﻿@model IEnumerable<RentACar.Models.Rental>
+
+@{
+    ViewData["Title"] = "My Rentals";
+}
+
+<h2>My Rentals</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Car Name</th>
+            <th>Car Brand</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var rental in Model)
+        {
+            <tr>
+                <td>@rental.CarName</td>
+                <td>@rental.CarBrandName</td>
+                <td>@rental.StartDate.ToShortDateString()</td>
+                <td>@rental.EndDate.ToShortDateString()</td>
+                <td><a asp-controller="URent" asp-action="Update" asp-route-id="@rental.Id" type="button" class="btn btn-success" style="width:150px;">Update</a></td>
+                <td><a asp-controller="URent" asp-action="Delete" asp-route-id="@rental.Id" type="button" class="btn btn-danger" style="width:150px;">Delete</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (!Model.Any())
+{
+    <p>You have not rented any cars yet.</p>
+}

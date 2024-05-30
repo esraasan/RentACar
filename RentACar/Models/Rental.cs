@@ -10,6 +10,7 @@ namespace RentACar.Models
         [Required]
         public int CarId { get; set; }
         public Cars? Car { get; set; }
+        public string CarName { get; set; }
         public string CarBrandName { get; set; }
 
         [Required]
@@ -18,5 +19,6 @@ namespace RentACar.Models
 
         public DateTime StartDate { get; set; }       
         public DateTime EndDate { get; set; }
+       
     }
 }
