@@ -12,7 +12,7 @@ using RentACar.Data;
 namespace RentACar.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240524080320_AddTable")]
+    [Migration("20240531084652_AddTable")]
     partial class AddTable
     {
         /// <inheritdoc />
@@ -77,6 +77,10 @@ namespace RentACar.Migrations
 
                     b.Property<int>("CarId")
                         .HasColumnType("int");
+
+                    b.Property<string>("CarName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");

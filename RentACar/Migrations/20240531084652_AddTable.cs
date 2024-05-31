@@ -56,6 +56,7 @@ namespace RentACar.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CarId = table.Column<int>(type: "int", nullable: false),
+                    CarName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CarBrandName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),

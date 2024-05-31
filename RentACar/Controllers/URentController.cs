@@ -114,6 +114,8 @@ namespace RentACar.Controllers
         [Authorize(Policy = "UserPolicy")]
         public IActionResult Update(Rental rent)
         {
+            
+            
             if (ModelState.IsValid)
             {
                 var existingRental = _rentalRepository.Get(r => r.Id == rent.Id);
@@ -128,7 +130,7 @@ namespace RentACar.Controllers
                 _rentalRepository.Update(existingRental);
                 TempData["basarili"] = "The rental transaction was successfully completed.";
                 _rentalRepository.Save();
-                return RedirectToAction("RentIndex");
+                return RedirectToAction("RentList");
             }
             return View(rent);
         }
