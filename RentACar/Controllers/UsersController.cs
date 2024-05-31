@@ -9,7 +9,7 @@ using System.Security.Cryptography;
 using System.Text;
 using RentACar.Repository;
 
-namespace NewLife.Controllers
+namespace RentACar.Controllers
 {
     public class UsersController : Controller
     {
@@ -24,13 +24,13 @@ namespace NewLife.Controllers
             _appDbContext = appDbContext;
         }
 
-        // GET: Users/Create
+
         public IActionResult SignUp()
         {
             return View();
         }
 
-        //POST: Users/Create
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SignUp([Bind("Name,Surname,Email,Password,PhoneNumber,Address")] Users users)
@@ -72,7 +72,7 @@ namespace NewLife.Controllers
                 return View(userDb);
             }
         }
-
+        [Authorize(Policy = "AdminPolicy")]
         [HttpPost]
         public IActionResult AddUpdate(Users user)
         {
@@ -108,7 +108,7 @@ namespace NewLife.Controllers
             return View(user);
         }
 
-        // GET: Users/Delete
+        [Authorize(Policy = "AdminPolicy")]
         public IActionResult Delete(int? id)
         {
             if (id == null || id == 0)
@@ -123,6 +123,7 @@ namespace NewLife.Controllers
             return View(userDb);
         }
 
+        [Authorize(Policy = "AdminPolicy")]
         [HttpPost, ActionName("Delete")]
         public IActionResult DeletePOST(int? id)
         {
@@ -155,7 +156,7 @@ namespace NewLife.Controllers
                     {
                         new Claim("userMail",user.Email),
                         new Claim("userId",user.Id.ToString()),
-                        new Claim("userName", user.Name), /*Kullanıcı adını ekliyoruz*/
+                        new Claim("userName", user.Name), /*Kullanıcı adını ekliyomm*/
                         new Claim("type",user.UserType)
                     };
                     ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -191,6 +192,12 @@ namespace NewLife.Controllers
         {
             string hashedInputPassword = HashPassword(inputPassword);
             return hashedInputPassword.Equals(hashedPassword);
+        }
+
+       
+        public IActionResult Profile()
+        {
+           return View();
         }
     }
 }

@@ -19,6 +19,13 @@ namespace RentACar.Models
 
         public DateTime StartDate { get; set; }       
         public DateTime EndDate { get; set; }
-       
+        public double CarPrice { get; set; }
+
+        public void CalculateRentalPrice(double carPrice)
+        {
+            int rentDurationInDays = (int)(EndDate.Date - StartDate.Date).TotalDays;
+            CarPrice = rentDurationInDays * carPrice;
+        }
+
     }
 }

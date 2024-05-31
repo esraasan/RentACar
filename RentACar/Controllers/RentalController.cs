@@ -61,11 +61,9 @@ namespace RentACar.Controllers
 
             return Json(cars);
         }
-        [Authorize(Policy = "AdminPolicy")]
-        public IActionResult AddUpdate(int? id)
+        [Authorize(Policy = "UserPolicy")]
+        public IActionResult Update(int? id)
         {
-            SetViewBags();
-
             if (id == null || id == 0)
             {
                 return View(new Rental());
@@ -78,39 +76,37 @@ namespace RentACar.Controllers
                     return NotFound();
                 }
                 return View(rent);
+
             }
+
         }
 
+
         [HttpPost]
-        [Authorize(Policy = "AdminPolicy")]
-        public IActionResult AddUpdate(Rental rent)
+        [Authorize(Policy = "UserPolicy")]
+        public IActionResult Update(Rental rent)
         {
+
+
             if (ModelState.IsValid)
             {
-                var car = _carsRepository.Get(c => c.Id == rent.CarId);
-                if (car != null)
+                var existingRental = _rentalRepository.Get(r => r.Id == rent.Id);
+                if (existingRental == null)
                 {
-                    rent.CarBrandName = car.CarBrandName;
+                    return NotFound();
                 }
 
-                if (rent.Id == 0)
-                {
-                    _rentalRepository.Add(rent);
-                    TempData["basarili"] = "The rental transaction was successfully completed.";
-                }
-                else
-                {
-                    _rentalRepository.Update(rent);
-                    TempData["basarili"] = "The update was successfully completed.";
-                }
+                existingRental.StartDate = rent.StartDate;
+                existingRental.EndDate = rent.EndDate;
 
+                _rentalRepository.Update(existingRental);
+                TempData["basarili"] = "The rental transaction was successfully completed.";
                 _rentalRepository.Save();
                 return RedirectToAction("Index");
             }
-
-            SetViewBags();
             return View(rent);
         }
+
 
         [Authorize(Policy = "AdminPolicy")]
         public IActionResult Delete(int? id)

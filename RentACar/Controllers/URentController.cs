@@ -67,8 +67,16 @@ namespace RentACar.Controllers
                 CarBrandName = car.CarBrandName,
                 UserId = userId,
                 StartDate = StartDate,
-                EndDate = EndDate
+                EndDate = EndDate,
+                CarPrice = car.CarPrice
             };
+
+            // Kiralama fiyatını hesapla
+            urental.CalculateRentalPrice(car.CarPrice); 
+
+            _rentalRepository.Add(urental);
+            _rentalRepository.Save();
+
 
             _rentalRepository.Add(urental);
             _rentalRepository.Save();
@@ -109,13 +117,11 @@ namespace RentACar.Controllers
 
         }
 
-      
+
         [HttpPost]
         [Authorize(Policy = "UserPolicy")]
         public IActionResult Update(Rental rent)
         {
-            
-            
             if (ModelState.IsValid)
             {
                 var existingRental = _rentalRepository.Get(r => r.Id == rent.Id);
@@ -124,16 +130,34 @@ namespace RentACar.Controllers
                     return NotFound();
                 }
 
+               //önceki fiyatı hesaplama
+                var car = _carsRepository.Get(c => c.Id == existingRental.CarId);
+                if (car == null)
+                {
+                    return NotFound();
+                }
+                double oldPrice = existingRental.CarPrice;
+                existingRental.CalculateRentalPrice(car.CarPrice);
+
+                // tarşhleri güncellemek için eklendi
                 existingRental.StartDate = rent.StartDate;
                 existingRental.EndDate = rent.EndDate;
 
                 _rentalRepository.Update(existingRental);
                 TempData["basarili"] = "The rental transaction was successfully completed.";
                 _rentalRepository.Save();
+
+                // güncelleme sonrası yeni fiyatın belirlenmesi için
+                if (oldPrice != existingRental.CarPrice)
+                {
+                    TempData["priceUpdated"] = "Rental price updated.";
+                }
+
                 return RedirectToAction("RentList");
             }
             return View(rent);
         }
+
 
 
 
