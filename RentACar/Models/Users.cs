@@ -15,7 +15,7 @@ namespace RentACar.Models
         [StringLength(50, ErrorMessage = "Surname cannot be longer than 50 characters.")]
         public string? Surname { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "The password field is required.")]
         [DataType(DataType.Password)]
         [StringLength(100, MinimumLength = 8, ErrorMessage = "Password must be at least 8 characters long.")]
         public string? Password { get; set; }
@@ -25,8 +25,8 @@ namespace RentACar.Models
         [StringLength(20, ErrorMessage = "Phone number cannot be longer than 20 characters.")]
         public string? PhoneNumber { get; set; }
 
-        [Required]
-        [EmailAddress]
+        [Required(ErrorMessage = "The email field is required.")]
+        [EmailAddress(ErrorMessage = "Invalid email address.")]
         [StringLength(100, ErrorMessage = "Email cannot be longer than 100 characters.")]
         public string? Email { get; set; }
 

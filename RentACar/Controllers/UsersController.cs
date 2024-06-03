@@ -30,19 +30,63 @@ namespace RentACar.Controllers
             return View();
         }
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SignUp([Bind("Name,Surname,Email,Password,PhoneNumber,Address")] Users users)
         {
             if (ModelState.IsValid)
             {
+                // emailin önceden kayıtlı olup olmadığını kontrol ermek üçün
+                var existingUser = _usersRepository.Get(u => u.Email == users.Email);
+                if (existingUser != null)
+                {
+                    ModelState.AddModelError("Email", "This email address is already registered.");
+                    return View(users);
+                }
+
                 users.Password = HashPassword(users.Password);
                 _appDbContext.Add(users);
                 await _appDbContext.SaveChangesAsync();
                 return RedirectToAction("Login", "Users");
             }
             return View(users);
+        }
+
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Login(string userMail, string password)
+        {
+          
+            if (ModelState.IsValid)
+            {
+               
+
+                var user = _usersRepository.Get(u => u.Email == userMail);
+                if (user != null && VerifyPassword(password, user.Password))
+                {
+                    List<Claim> claims = new List<Claim>()
+                {
+                    new Claim("userMail", user.Email),
+                    new Claim("userId", user.Id.ToString()),
+                    new Claim("userName", user.Name),
+                    new Claim("type", user.UserType)
+                };
+                    ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    ClaimsPrincipal principal = new ClaimsPrincipal(identity);
+                    HttpContext.SignInAsync(principal);
+                    return user.UserType == "Admin" ? RedirectToAction("Index") : RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    TempData["Error"] = "Incorrect email or password. Please try again.";
+                }
+            }
+            return View();
         }
 
         [Authorize(Policy = "AdminPolicy")]
@@ -138,35 +182,7 @@ namespace RentACar.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult Login()
-        {
-            return View();
-        }
 
-        [HttpPost]
-        //[ValidateAntiForgeryToken]
-        public IActionResult Login(string userMail, string password)
-        {
-            if (ModelState.IsValid)
-            {
-                var user = _usersRepository.Get(u => u.Email == userMail);
-                if (user != null && VerifyPassword(password, user.Password))
-                {
-                    List<Claim> claims = new List<Claim>()
-                    {
-                        new Claim("userMail",user.Email),
-                        new Claim("userId",user.Id.ToString()),
-                        new Claim("userName", user.Name), /*Kullanıcı adını ekliyomm*/
-                        new Claim("type",user.UserType)
-                    };
-                    ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                    ClaimsPrincipal principal = new ClaimsPrincipal(identity);
-                    HttpContext.SignInAsync(principal);
-                    return user.UserType == "Admin" ? RedirectToAction("Index") : RedirectToAction("Index", "Home");
-                }
-            }
-            return View();
-        }
 
         public async Task<IActionResult> Logout()
         {
@@ -194,10 +210,10 @@ namespace RentACar.Controllers
             return hashedInputPassword.Equals(hashedPassword);
         }
 
-       
+
         public IActionResult Profile()
         {
-           return View();
+            return View();
         }
     }
 }
