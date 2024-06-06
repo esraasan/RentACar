@@ -17,12 +17,24 @@
 
 <div class="container">
     <h1 class="my-4">@ViewData["Title"]</h1>
+
+    <div class="form-group">
+        <label for="brandFilter">Filter</label>
+        <select id="brandFilter" class="form-control">
+            <option value="">All Brands</option>
+            @foreach (var brand in Model.Select(c => c.CarBrandName).Distinct())
+            {
+                <option value="@brand">@brand</option>
+            }
+        </select>
+    </div>
+
     @if (Model.Any())
     {
         <div class="row">
             @foreach (var car in Model)
             {
-                <div class="col-md-6 mb-2">
+                <div class="col-md-6 mb-2" data-brand="@car.CarBrandName">
                     <div class="card2 h-100">
                         <img src="@car.ImgUrl" class="card-img-top" alt="@car.CarName">
                         <div class="card-body">
@@ -35,11 +47,11 @@
                             </p>
                             @if (!User.Identity.IsAuthenticated)
                             {
-                                <a asp-controller="Users" asp-action="Login" asp-route-id="@car.Id" class="btn btn-secondary  btn-block">Rent</a>
+                                <a asp-controller="Users" asp-action="Login" asp-route-id="@car.Id" class="btn btn-secondary btn-block">Rent</a>
                             }
                             else
                             {
-                                <a asp-controller="URent" asp-action="RentCar" asp-route-carId="@car.Id" class="btn btn-secondary  btn-block">Rent</a>
+                                <a asp-controller="URent" asp-action="RentCar" asp-route-carId="@car.Id" class="btn btn-secondary btn-block">Rent</a>
                             }
                         </div>
                     </div>
@@ -52,3 +64,17 @@
         <p class="text-center">No cars available for rent.</p>
     }
 </div>
+
+<script>
+    $(document).ready(function () {
+        $('#brandFilter').change(function () {
+            var selectedBrand = $(this).val();
+            $('.card2').hide();
+            if (selectedBrand === '') {
+                $('.card2').show();
+            } else {
+                $('.card[data-brand="' + selectedBrand + '"]').show();
+            }
+        });
+    });
+</script>

@@ -59,12 +59,14 @@ namespace RentACar.Controllers
                 else
                 {
                     var rentalCar = _carsRepository.Get(l => l.Id == rental.CarId);
+                    
                     rentalCar.IsActive = false;
                     _carsRepository.Update(rentalCar);
                 }
                 _carsRepository.Save();
             }
             var cars = _carsRepository.GetAllCars().Where(c => c.IsActive).ToList();
+            cars = cars.OrderBy(x=>x.CarBrandName).ToList();
             return View(cars);
         }
 
