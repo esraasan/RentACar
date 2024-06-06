@@ -1,36 +1,58 @@
 ﻿@model Users
-        <div class="login-dark">
-            <form asp-action="Login" method="post" class="text-left">
-                <div class="illustration"><i class="icon ion-ios-locked-outline"></i></div>
-   
-                <div class="form-group">
-                    <label for="userMail">E-mail</label>
-                    <input id="userMail" asp-for="Email" name="Email" class="form-control" placeholder="Email">
-                    <span asp-validation-for="Email" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input id="password" asp-for="Password" name="Password" type="password" class="form-control" placeholder="Password">
-                    <span asp-validation-for="Password" class="text-danger"></span>
-                </div>
-        <button type="submit" class="btn btn-primary btn-block mx-auto ">Login</button>
+@{
+    ViewData["Title"] = "Login";
+}
 
-                <div>
-                    <a asp-action="SignUp">Sign Up?</a>
-                </div>
-            </form>
-            <br />
 
-            @if (TempData["Error"] != null)
-            {
-                <div class="alert alert-danger">
-                    @TempData["Error"]
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-10 col-sm-12 col-md-11 col-lg-8 col-xl-8 col-xxl-8">
+            <div class="card border border-light-subtle rounded-3 shadow-sm">
+                <div class="card-body p-3 p-md-4 p-xl-5">
+                    <div class="text-center">
+                        <img src="~/img/password.png" width="30%">
+                    </div>
+                    <form asp-action="Login" method="post" class="text-left">
+                        <div class="row gy-2 overflow-hidden">
+                            <div class="col-12">
+                                <div class="form-floating mb-3">
+                                    <input asp-for="Email" name="userMail" class="form-control" placeholder="Email">
+                                    <label asp-for="Email" class="form-label"></label>
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-floating mb-3">
+                                    <input id="password" asp-for="Password" name="password" type="password" class="form-control" placeholder="Password">
+                                    <label asp-for="Password" class="form-label"></label>
+                                    <span asp-validation-for="Password" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="d-grid my-3">
+                                    <button type="submit" class="btn btn-primary btn-lg">Login</button>
+                                </div>
+                            </div>
+                            <div class="col-12 text-center">
+                                <a asp-action="SignUp">Sign Up?</a>
+                            </div>
+                        </div>
+                        @if (TempData["Error"] != null)
+                        {
+                            <div class="alert alert-danger" role="alert">
+                                @TempData["Error"]
+                            </div>
+                        }
+                    </form>
                 </div>
-            }
+            </div>
         </div>
+    </div>
+</div>
+
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
-

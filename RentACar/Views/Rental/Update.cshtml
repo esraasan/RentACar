@@ -5,10 +5,10 @@
 }
 
 <div class="container mt-5">
-    <h2 class="mb-4">Update Rental</h2>
+    <h2 class="mb-4 text-center">Update Rental</h2>
 
-    <div class="card shadow-sm">
-        <div class="card-body">
+    <div class="card shadow-lg border-0">
+        <div class="card-body p-4">
             <form method="post">
                 <input asp-for="Id" hidden />
                 <input asp-for="CarId" hidden />
@@ -17,38 +17,42 @@
                 <input asp-for="Car" hidden />
                 <input asp-for="UserId" hidden />
                 <input asp-for="User" hidden />
-                <div class="col-sm-6">
-                    <label asp-for="CarBrandName" class="form-label">Brand</label>
-                    <input asp-for="CarBrandName" disabled class="form-control" />
-                    <span asp-validation-for="CarBrandName" class="text-danger"></span>
-                </div>
-                <div class="col-sm-6">
-                    <label asp-for="CarName" class="form-label">Car Name</label>
-                    <input asp-for="CarName" disabled class="form-control" />
-                    <span asp-validation-for="CarName" class="text-danger"></span>
+
+                <div class="mb-3 row">
+                    <label asp-for="CarBrandName" class="col-sm-5 col-form-label fw-bold ">Brand</label>
+                    <div class="col-sm-10">
+                        <input asp-for="CarBrandName" disabled class="form-control" />
+                        <span asp-validation-for="CarBrandName" class="text-danger"></span>
+                    </div>
                 </div>
 
-                <div class="form-group row">
-                    <label asp-for="StartDate" class="col-sm-2 col-form-label">Start Date</label>
-                    <div class="col-sm-6">
+                <div class="mb-3 row">
+                    <label asp-for="CarName" class="col-sm-5 col-form-label fw-bold ">Car Name</label>
+                    <div class="col-sm-10">
+                        <input asp-for="CarName" disabled class="form-control" />
+                        <span asp-validation-for="CarName" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="mb-3 row">
+                    <label asp-for="StartDate" class="col-sm-5 col-form-label fw-bold">Start Date</label>
+                    <div class="col-sm-10">
                         <input asp-for="StartDate" class="form-control" />
                         <span asp-validation-for="StartDate" class="text-danger"></span>
                     </div>
                 </div>
-                <br />
-                <div class="form-group row">
-                    <label asp-for="EndDate" class="col-sm-2 col-form-label">End Date</label>
-                    <div class="col-sm-6">
+
+                <div class="mb-3 row">
+                    <label asp-for="EndDate" class="col-sm-5 col-form-label fw-bold ">End Date</label>
+                    <div class="col-sm-10">
                         <input asp-for="EndDate" class="form-control" />
                         <span asp-validation-for="EndDate" class="text-danger"></span>
                     </div>
                 </div>
 
-                <div class="form-group row mt-4">
-                    <div class="col-sm-10 offset-sm-2">
-                        <button type="submit" class="btn btn-primary mr-2">Update</button>
-                        <a asp-action="RentList" class="btn btn-secondary">Back</a>
-                    </div>
+                <div class="d-flex justify-content-end mt-4">
+                    <button type="submit" class="btn btn-primary me-2">Update</button>
+                    <a asp-action="Index" class="btn btn-secondary">Back</a>
                 </div>
             </form>
         </div>

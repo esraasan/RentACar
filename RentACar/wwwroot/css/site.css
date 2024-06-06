@@ -20,82 +20,61 @@ body {
     margin-bottom: 60px;
     /* overflow: hidden;*/
 }
+/**/
+.container {
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 
-
-.login-dark {
-    height: 90vh;
-    background: #475d62 url(../img/backlog.jpg);
-    background-size: cover;
-    position: relative;
 }
 
-    .login-dark form {
-        max-width: 380px;
-        width: 90%;
-        background-color: rgb(39, 49, 59,0.5);
-        padding: 40px;
-        border-radius: 4px;
-        transform: translate(-50%, -50%);
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        color: #fff;
-        box-shadow: 3px 3px 4px rgba(0,0,0,0.2);
-    }
+.card {
+    background-color: #214a80cc;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
 
-    .login-dark .illustration {
-        text-align: center;
-        padding: 15px 0 20px;
-        font-size: 100px;
-        color: #2980ef;
-    }
+.form-floating .form-control {
+    background: none;
+    border: none;
+    border-bottom: 1px solid #a6b3c2;
+    border-radius: 0;
+    box-shadow: none;
+    outline: none;
+    color: #fff;
+}
 
-    .login-dark form .form-control {
-        background: none;
-        border: none;
-        border-bottom: 1px solid #434a52;
-        border-radius: 0;
+    .form-floating  {
+        border-bottom-color: #2980ef;
         box-shadow: none;
+    }
+
+.form-floating .form-label {
+    color: #a6b3c2;
+}
+
+
+.btn-primary {
+    background: #214a80;
+    border: none;
+    border-radius: 4px;
+    padding: 12px;
+    text-shadow: none;
+    outline: none;
+}
+
+    .btn-primary:hover, .btn-primary:active {
+        background: #2980ef;
         outline: none;
-        color: inherit;
     }
 
-    .login-dark form .btn-primary {
-        background: #214a80;
-        border: none;
-        border-radius: 4px;
-        padding: 11px;
-        box-shadow: none;
-        margin-top: 26px;
-        text-shadow: none;
-        outline: none;
-    }
+.text-danger {
+    color: #ff6b6b;
+}
 
-        .login-dark form .btn-primary:hover, .login-dark form .btn-primary:active {
-            background: #214a80;
-            outline: none;
-        }
-
-    .login-dark form .forgot {
-        display: block;
-        text-align: center;
-        font-size: 12px;
-        color: #6f7a90;
-        opacity: 0.9;
-        text-decoration: none;
-    }
-
-        .login-dark form .forgot:hover, .login-dark form .forgot:active {
-            opacity: 1;
-            text-decoration: none;
-        }
-
-    .login-dark form .btn-primary:active {
-        transform: translateY(1px);
-    }
-
-
-/* */
 
 
 .mavi {
@@ -191,214 +170,67 @@ body {
     }
 
 
-
-
-
-
-/* iþler */
-
-
-.service-card {
-    text-shadow: 4px 4px 6px #253725;
-    border-radius: 10px;
-    padding: 20px;
-    margin: 20px;
+/*profile*/
+.account-settings .user-profile {
+    margin: 0 0 1rem 0;
+    padding-bottom: 1rem;
     text-align: center;
-    color: #ffffff;
 }
 
-.icon-container i {
-    text-shadow: 0 4px 6px #253725;
-    color: #fff9f9;
-    font-size: 24px;
-}
-
-
-.container1 .service-card p {
-    text-shadow: 4px 4px 6px rgb(24, 101, 34);
-    color: #ffffff;
-    ;
-}
-
-.button {
-    cursor: pointer;
-    border: 2px solid #3A774D;
-    background: #9ba572e6;
-    color: #ffffff;
-    display: inline-block;
-    font-family: rubik;
-    letter-spacing: 4px;
-    line-height: 1;
-    padding: 14px 30px;
-    text-transform: uppercase;
-    text-decoration: none;
-}
-
-    .button:hover {
-        background: #9ba57284;
-        color: #ffffff;
-        text-decoration: none;
+    .account-settings .user-profile .user-avatar {
+        margin: 0 0 1rem 0;
     }
 
+        .account-settings .user-profile .user-avatar img {
+            width: 90px;
+            height: 90px;
+            -webkit-border-radius: 100px;
+            -moz-border-radius: 100px;
+            border-radius: 100px;
+        }
 
+    .account-settings .user-profile h5.user-name {
+        margin: 0 0 0.5rem 0;
+    }
 
-/* haritali */
+    .account-settings .user-profile h6.user-email {
+        margin: 0;
+        font-size: 0.8rem;
+        font-weight: 400;
+        color: #9fa8b9;
+    }
 
-.map_canvas {
-    height: 350px;
-    margin-bottom: 20px;
-}
-
-.box-map {
-    line-height: 1;
-    padding: 20px 0 20px 20px;
+.account-settings .about {
+    margin: 2rem 0 0 0;
     text-align: center;
-    width: 100%;
 }
 
-    .box-map > h3 {
-        font-size: 16px;
-        letter-spacing: 3px;
-        margin: 10px 0 20px;
-        text-transform: uppercase;
+    .account-settings .about h5 {
+        margin: 0 0 15px 0;
+        color: #007ae1;
     }
 
-form input,
-form textarea {
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    border: 1px solid #ddd;
-    color: #888;
-    line-height: inherit;
-    padding: 12px 20px;
-    width: 80%;
-    background: #fff;
-}
-
-#ContactForm {
-    text-align: left;
-}
-
-input:focus,
-textarea:focus {
-    border-color: #aaa;
-}
-
-::-webkit-input-placeholder {
-    color: #999;
-}
-
-#ContactForm p label {
-    cursor: text;
-    display: block;
-    margin: 0;
-    position: relative;
-    top: 0;
-    width: 100%;
-}
-
-:-moz-placeholder {
-    /* Firefox 18- */
-    color: #999;
-}
-
-::-moz-placeholder {
-    /* Firefox 19+ */
-    color: #999;
-}
-
-:-ms-input-placeholder {
-    color: #999;
-}
-
-#form-wrapper #MyContactForm {
-    bottom: 12px;
-    color: #3A774D;
-    font-family: inherit;
-    font-size: 12px;
-    font-weight: normal;
-    left: auto;
-    font-style: italic;
-    letter-spacing: 0;
-    position: absolute;
-    right: 20px;
-    text-transform: capitalize;
-    width: auto;
-}
-
-.contact-btn {
-    cursor: pointer;
-    border: 2px solid#3A774D;
-    color: #36624d;
-    display: inline-block;
-    font-family: rubik;
-    font-weight: 500;
-    letter-spacing: 4px;
-    line-height: 1;
-    margin-top: 5px;
-    padding: 14px 30px;
-    text-transform: uppercase;
-    text-decoration: none;
-}
-
-    .contact-btn:hover {
-        background: #9ba57284;
-        color: #ffffff;
-        text-decoration: none;
+    .account-settings .about p {
+        font-size: 0.825rem;
     }
 
-#MyContactForm p {
-    position: relative;
+.form-control {
+    border: 1px solid #cfd1d8;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    font-size: .825rem;
+    background: #ffffff;
+    color: #2e323c;
 }
 
-.response h3 {
-    font-size: 22px;
-    margin: 10px 0 25px;
-    text-transform: uppercase;
+.profile {
+    background: #ffffff;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    border: 0;
+    margin-bottom: 1rem;
 }
 
-.contact-box .sub-title {
-    color: #333;
-}
-
-/* iþbirlik */
-.bg {
-    overflow: hidden;
-    position: relative;
-}
-
-.bg-mask {
-    background-color: rgba(46, 64, 38, 0.34);
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    z-index: 0;
-}
-
-.bg .para-img {
-    background-image: url("../images/14.jpg");
-}
-
-.para-img {
-    background-attachment: fixed;
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    z-index: -1;
-}
-
-.bg .box-content {
-    position: relative;
-    z-index: 1;
-}
-
-.bg .slide-btn {
-    margin: 40px 0;
-}
+/**/

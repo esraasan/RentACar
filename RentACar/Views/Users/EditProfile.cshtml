@@ -1,0 +1,80 @@
+﻿@model RentACar.Models.Users
+
+<form asp-action="EditProfile" method="post">
+    <input asp-for="Id" type="hidden" />
+    <input asp-for="Email" type="hidden" />
+    <div class="container d-flex justify-content-center">
+        <div class="row gutters w-100" style="max-width: 1000px;">
+            <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
+                <div class="profile card h-100">
+                    <div class="card-body">
+                        <div class="account-settings">
+                            <div class="user-profile text-center">
+                                <br /><br /><br /><br />
+                                <div class="user-avatar">
+                                    <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="User">
+                                </div>
+                                <h5 class="user-name">@Model.Name @Model.Surname</h5>
+                                <h6 class="user-email">@Model.Email</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+                <div class="profile card h-100">
+                    <div class="card-body">
+                        <div class="row gutters">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <h6 class="mb-2 text-primary">Profile</h6>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label for="name">Name</label>
+                                    <input asp-for="Name" class="form-control" id="name" />
+                                    <span asp-validation-for="Name" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label for="surName">Surname</label>
+                                    <input asp-for="Surname" class="form-control" id="surName" />
+                                    <span asp-validation-for="Surname" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label for="password">Password</label>
+                                    <input asp-for="Password" type="password" class="form-control" id="password" placeholder="*****" />
+                                    <span asp-validation-for="Password" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label for="phone">Phone</label>
+                                    <input asp-for="PhoneNumber" class="form-control" id="phone" />
+                                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <label for="address">Address</label>
+                                    <input asp-for="Address" class="form-control" id="address" />
+                                    <span asp-validation-for="Address" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row gutters">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="text-right">
+                                    <button type="submit" class="btn btn-secondary">Update</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

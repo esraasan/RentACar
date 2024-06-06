@@ -1,12 +1,73 @@
 ﻿@model RentACar.Models.Users
 
-<input asp-for="Id" hidden />
-<input asp-for="UserType" hidden />
-<h1>My Profile</h1>
-<div>
-    <p><strong>Name:</strong> @Model.Name @Model.Surname</p>
-    <p><strong>Email:</strong> @Model.Email</p>
-    <p><strong>Phone Number:</strong> @Model.PhoneNumber</p>
-    <p><strong>Address:</strong> @Model.Address</p>
-    <p><strong>User Type:</strong> @Model.UserType</p>
+<div class="container d-flex justify-content-center">
+    <div class="row gutters w-100" style="max-width: 1000px;">
+        <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
+            <div class="profile card h-100">
+                <div class="card-body">
+                    <div class="account-settings">
+                        <div class="user-profile text-center">
+                            <br /><br /><br /><br />
+                            <div class="user-avatar">
+                                <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="User">
+                            </div>
+                            <h5 class="user-name">@Model.Name @Model.Surname</h5>
+                            <h6 class="user-email">@Model.Email</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+            <div class="profile card h-100">
+                <div class="card-body">
+                    <div class="row gutters">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <h6 class="mb-2 text-primary">Profile</h6>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="fullName">Full Name</label>
+                                <input type="text" class="form-control" id="fullName" value="@Model.Name @Model.Surname" disabled>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
+                            <div class="form-group">
+                                <label for="eMail">Email</label>
+                                <input type="email" class="form-control" id="eMail" value="@Model.Email" disabled>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" class="form-control" id="password" value="********" disabled>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
+                            <div class="form-group">
+                                <label for="phone">Phone</label>
+                                <input type="text" class="form-control" id="phone" value="@Model.PhoneNumber" disabled>
+                            </div>
+                        </div>
+                        <div class="col-xl-10 col-lg-10 col-md-10 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label for="Street">Street</label>
+                                <input type="text" class="form-control" id="Street" value="@Model.Address" disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row gutters">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="text-right">
+                               
+                                <a asp-controller="Users" asp-route-id="" asp-action="EditProfile" class="btn btn-secondary">Update</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+

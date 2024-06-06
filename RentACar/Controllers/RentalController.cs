@@ -127,8 +127,9 @@ namespace RentACar.Controllers
 
         [HttpPost, ActionName("Delete")]
         [Authorize(Policy = "AdminPolicy")]
-        public IActionResult DeletePost(int id)
+        public IActionResult DeletePost(int id, int carId)
         {
+            var car = _carsRepository.Get(c => c.Id == carId);
             var rent = _rentalRepository.Get(r => r.Id == id);
             if (rent == null)
             {
@@ -137,6 +138,9 @@ namespace RentACar.Controllers
 
             _rentalRepository.Delete(rent);
             _rentalRepository.Save();
+            car.IsActive = true;
+            _carsRepository.Update(car);
+            _carsRepository.Save();
             TempData["basarili"] = "The deletion was successfully completed.";
             return RedirectToAction("Index");
         }

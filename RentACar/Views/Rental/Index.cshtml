@@ -1,7 +1,7 @@
 ﻿@model List<Rental>
 
 @{
-    ViewData["Title"] = "Rental";
+    ViewData["Title"] = "Rent List";
 }
 
 @if (TempData["basarili"] != null)
@@ -12,52 +12,60 @@
 }
 
 <div class="container">
-    <div class="row pt-3 rb-4">
-        <div>
+    <div class="row pt-3 pb-4">
+
+        <div class="col">
             <h1>@ViewData["Title"]</h1>
         </div>
     </div>
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>
-                    Id
-                </th>
-                <th>
-                    User
-                </th>
-                <th>
-                    Car Name
-                </th>
-                <th>
-                    Car Brand
-                </th>
-                <th>
-                    Start Date
-                </th>
-                <th>
-                    End Date
-                </th>
-                <th></th>
-                <th></th>
-            </tr>
+    <div class="table-responsive">
 
-        </thead>
-        <tbody>
-            @foreach (var rent in Model)
-            {
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+
                 <tr>
-                    <td>@rent.Id</td>
-                    <td>@rent.User.Name</td>
-                    <td>@rent.CarName</td>
-                    <td>@rent.CarBrandName</td>
-                    <td>@rent.StartDate</td>
-                    <td>@rent.EndDate</td>
-                    <td><a asp-controller="Rental" asp-action="Update" asp-route-id="@rent.Id" type="button" class="btn btn-success" style="width:150px;">Update</a></td> <!--asp-route-id=idyi bulur-->
-                    <td><a asp-controller="Rental" asp-action="Delete" asp-route-id="@rent.Id" type="button" class="btn btn-danger" style="width:150px;">Delete</a></td>
+                    <th>Id</th>
 
+                    <th> User</th>
+
+
+                    <th>  Car Name</th>
+
+
+                    <th>Car Brand </th>
+
+
+                    <th>  Start Date</th>
+
+
+
+                    <th>End Date </th>
+
+
+
+                    <th></th>
+                    <th></th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var rent in Model)
+                {
+                    <tr>
+                        <td>@rent.Id</td>
+                        <td>@rent.User.Name</td>
+                        <td>@rent.CarName</td>
+                        <td>@rent.CarBrandName</td>
+                        <td>@rent.StartDate</td>
+                        <td>@rent.EndDate</td>
+                        <td>
+                            <a asp-controller="Rental" asp-action="Update" asp-route-id="@rent.Id" type="button" class="btn btn-success" style="width:100px;">Update</a>
+                        </td>
+                        <td>
+                            <a asp-controller="Rental" asp-action="Delete" asp-route-id="@rent.Id" type="button" class="btn btn-danger" style="width:100px;">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>

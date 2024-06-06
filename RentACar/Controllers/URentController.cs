@@ -5,6 +5,7 @@ using RentACar.Models;
 using RentACar.Repository;
 using System;
 using System.Linq;
+using System.Runtime.ConstrainedExecution;
 
 namespace RentACar.Controllers
 {
@@ -25,7 +26,45 @@ namespace RentACar.Controllers
 
         public IActionResult Index()
         {
-            var cars = _carsRepository.GetAllCars();
+            var userIdClaim = HttpContext.User.FindFirst("userId")?.Value;
+            var now = DateTime.Now;
+            var userRentals = _rentalRepository.GetAll().ToList();
+
+            foreach (var rental in userRentals)
+            {
+                if (rental.EndDate <= now)
+                {
+                    var car = _carsRepository.Get(c => c.Id == rental.CarId);
+                    if (car != null && !car.IsActive)
+                    {
+                        car.IsActive = true;
+                        _carsRepository.Update(car);
+                    }
+                }
+                else
+                {
+                    var car = _carsRepository.Get(c => c.Id == rental.CarId);
+                    car.IsActive = false;
+                    _carsRepository.Update(car);
+                }
+                if (rental.StartDate >= now)
+                {
+                    var rentalCar = _carsRepository.Get(l => l.Id == rental.CarId);
+                    if (!rentalCar.IsActive)
+                    {
+                        rentalCar.IsActive = true;
+                        _carsRepository.Update(rentalCar);
+                    }
+                }
+                else
+                {
+                    var rentalCar = _carsRepository.Get(l => l.Id == rental.CarId);
+                    rentalCar.IsActive = false;
+                    _carsRepository.Update(rentalCar);
+                }
+                _carsRepository.Save();
+            }
+            var cars = _carsRepository.GetAllCars().Where(c => c.IsActive).ToList();
             return View(cars);
         }
 
@@ -43,6 +82,36 @@ namespace RentACar.Controllers
 
             return View();
         }
+
+        [Authorize(Policy = "UserPolicy")]
+        public IActionResult RentList()
+        {
+            var userIdClaim = HttpContext.User.FindFirst("userId")?.Value;
+            if (userIdClaim == null || !int.TryParse(userIdClaim, out int userId))
+            {
+                return Unauthorized();
+            }
+
+            var now = DateTime.UtcNow;
+            var userRentals = _rentalRepository.GetAll().Where(r => r.UserId == userId).ToList();
+
+            foreach (var rental in userRentals)
+            {
+                if (rental.EndDate <= now)
+                {
+                    var car = _carsRepository.Get(c => c.Id == rental.CarId);
+                    if (car != null && !car.IsActive)
+                    {
+                        car.IsActive = true;
+                        _carsRepository.Update(car);
+                    }
+                }
+            }
+
+            _carsRepository.Save();
+            return View(userRentals);
+        }
+
 
         [HttpPost]
         [Authorize(Policy = "UserPolicy")]
@@ -71,51 +140,36 @@ namespace RentACar.Controllers
                 CarPrice = car.CarPrice
             };
 
-            // Kiralama fiyatını hesapla
-            urental.CalculateRentalPrice(car.CarPrice); 
+
+            urental.CalculateRentalPrice(car.CarPrice);
 
             _rentalRepository.Add(urental);
             _rentalRepository.Save();
 
+            var now = DateTime.UtcNow;
+            var userRentals = _rentalRepository.GetAll().Where(r => r.UserId == userId).ToList();
 
-            _rentalRepository.Add(urental);
-            _rentalRepository.Save();
+            foreach (var rental in userRentals)
+            {
+               
+                if (rental.StartDate >= now)
+                {
+                    var rentalCar = _carsRepository.Get(l => l.Id == rental.CarId);
+                    if (rentalCar.IsActive)
+                    {
+                        rentalCar.IsActive = false;
+                        _carsRepository.Update(rentalCar);
+                    }
+                }
+            }
+            _carsRepository.Save();
 
             TempData["Success"] = "Car rented successfully!";
             return RedirectToAction("RentList");
         }
 
-        [Authorize(Policy = "UserPolicy")]
-        public IActionResult RentList()
-        {
-            var userIdClaim = HttpContext.User.FindFirst("userId")?.Value;
-            if (userIdClaim == null || !int.TryParse(userIdClaim, out int userId))
-            {
-                return Unauthorized();
-            }
 
-            var userRentals = _rentalRepository.GetAll().Where(r => r.UserId == userId).ToList();
-            return View(userRentals);
-        }
-        [Authorize(Policy = "UserPolicy")]
-        public IActionResult Update(int? id)
-        {
-            if (id == null || id == 0)
-            {
-                return View(new Rental());
-            }
-            else
-            {
-                var rent = _rentalRepository.Get(r => r.Id == id);
-                if (rent == null)
-                {
-                    return NotFound();
-                }
-                return View(rent);
 
-            }
-
-        }
 
 
         [HttpPost]
@@ -130,7 +184,7 @@ namespace RentACar.Controllers
                     return NotFound();
                 }
 
-               //önceki fiyatı hesaplama
+                //önceki fiyatı hesaplama
                 var car = _carsRepository.Get(c => c.Id == existingRental.CarId);
                 if (car == null)
                 {
@@ -180,8 +234,9 @@ namespace RentACar.Controllers
 
         [HttpPost, ActionName("Delete")]
         [Authorize(Policy = "UserPolicy")]
-        public IActionResult DeletePost(int id)
+        public IActionResult DeletePost(int id,int carId)
         {
+            var car = _carsRepository.Get(c => c.Id == carId);
             var rent = _rentalRepository.Get(r => r.Id == id);
             if (rent == null)
             {
@@ -190,6 +245,10 @@ namespace RentACar.Controllers
 
             _rentalRepository.Delete(rent);
             _rentalRepository.Save();
+
+            car.IsActive = true;
+            _carsRepository.Update(car);
+            _carsRepository.Save();
             TempData["basarili"] = "The deletion was successfully completed.";
             return RedirectToAction("RentList");
         }

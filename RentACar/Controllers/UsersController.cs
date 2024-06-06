@@ -8,6 +8,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using RentACar.Repository;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace RentACar.Controllers
 {
@@ -89,6 +90,8 @@ namespace RentACar.Controllers
             return View();
         }
 
+        
+
         [Authorize(Policy = "AdminPolicy")]
         public IActionResult Index()
         {
@@ -97,6 +100,7 @@ namespace RentACar.Controllers
             return View(objUserList);
         }
 
+        [Authorize(Policy = "AdminPolicy")]
         public IActionResult AddUpdate(int? id)
         {
             var errors = ModelState.Values.SelectMany(v => v.Errors);
@@ -139,9 +143,12 @@ namespace RentACar.Controllers
                     userDb.Name = user.Name;
                     userDb.Email = user.Email;
                     userDb.Surname = user.Surname;
-                    userDb.Password = user.Password;
                     userDb.PhoneNumber = user.PhoneNumber;
                     user.Address = user.Address;
+                    if (!string.IsNullOrEmpty(user.Password))
+                    {
+                        userDb.Password = HashPassword(user.Password);
+                    }
 
                     _usersRepository.Update(userDb);
                     TempData["Succeed"] = "User updated successfully";
@@ -182,7 +189,67 @@ namespace RentACar.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize]
+        public IActionResult Profile()
+        {
+            var userId = HttpContext.User.FindFirst("userId")?.Value;
+            var user = _usersRepository.Get(u => u.Id == Convert.ToInt32(userId));
 
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
+        }
+
+        [Authorize]
+        public IActionResult EditProfile()
+        {
+            var userId = HttpContext.User.FindFirst("userId")?.Value;
+            var user = _usersRepository.Get(u => u.Id == Convert.ToInt32(userId));
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
+        }
+
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditProfile(Users user)
+        {
+            if (ModelState.IsValid)
+            {
+                var userDb = _usersRepository.Get(u => u.Id == user.Id);
+                if (userDb == null)
+                {
+                    return NotFound();
+                }
+
+                userDb.Name = user.Name;
+                userDb.Surname = user.Surname;
+                userDb.Email = user.Email;
+                userDb.PhoneNumber = user.PhoneNumber;
+                userDb.Address = user.Address;
+
+                if (!string.IsNullOrEmpty(user.Password))
+                {
+                    userDb.Password = HashPassword(user.Password);
+                }
+
+                _usersRepository.Update(userDb);
+                _usersRepository.Save();
+
+                TempData["Succeed"] = "Profile updated successfully";
+                return RedirectToAction("Profile");
+            }
+
+            return View(user);
+        }
 
         public async Task<IActionResult> Logout()
         {
@@ -211,9 +278,6 @@ namespace RentACar.Controllers
         }
 
 
-        public IActionResult Profile()
-        {
-            return View();
-        }
+       
     }
 }
