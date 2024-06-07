@@ -24,11 +24,25 @@ namespace RentACar.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(DateTime? startDate, DateTime? endDate)
         {
             var userIdClaim = HttpContext.User.FindFirst("userId")?.Value;
             var now = DateTime.Now;
             var userRentals = _rentalRepository.GetAll().ToList();
+
+            var allCars = _carsRepository.GetAllCars().ToList();
+            var startdate = TempData["StartDate"];
+            var enddate = TempData["EndDate"];
+            if (startDate.HasValue)
+            {
+                ViewBag.StartDate = startDate;
+            }
+            if (endDate.HasValue)
+            {
+                ViewBag.EndDate = endDate;
+            }
+
+
 
             foreach (var rental in userRentals)
             {
@@ -65,25 +79,28 @@ namespace RentACar.Controllers
                 }
                 _carsRepository.Save();
             }
+            
+            if (startDate.HasValue && endDate.HasValue)
+            {
+               
+                var unavailableCar = _rentalRepository.GetAll()
+                    .Where(r => r.StartDate < endDate && r.EndDate > startDate)
+                    .Select(r => r.CarId)
+                    .Distinct()
+                    .ToList();
+
+                allCars = allCars.Where(car => !unavailableCar.Contains(car.Id)).ToList();
+                TempData["StartDate"] = startDate.Value;
+                TempData["EndDate"] = endDate.Value;
+                return View(allCars);
+            }
             var cars = _carsRepository.GetAllCars().Where(c => c.IsActive).ToList();
-            cars = cars.OrderBy(x=>x.CarBrandName).ToList();
             return View(cars);
         }
 
-        public IActionResult RentCar(int carId)
-        {
-            var car = _carsRepository.Get(c => c.Id == carId);
-            if (car == null)
-            {
-                return NotFound();
-            }
 
-            ViewBag.CarId = carId;
-            ViewBag.CarName = car.CarName;
-            ViewBag.CarBrandName = car.CarBrandName;
 
-            return View();
-        }
+       
 
         [Authorize(Policy = "UserPolicy")]
         public IActionResult RentList()
@@ -113,11 +130,28 @@ namespace RentACar.Controllers
             _carsRepository.Save();
             return View(userRentals);
         }
+        public IActionResult RentCar(int carId, string startDate, string endDate)
+        {
+            var car = _carsRepository.Get(c => c.Id == carId);
+            if (car == null)
+            {
+                return NotFound();
+            }
 
+            ViewBag.CarId = carId;
+            ViewBag.CarName = car.CarName;
+            ViewBag.CarBrandName = car.CarBrandName;
+            ViewBag.StartDate = startDate;
+            ViewBag.EndDate = endDate;
+
+            
+
+            return View();
+        }
 
         [HttpPost]
         [Authorize(Policy = "UserPolicy")]
-        public IActionResult RentCar(int carId, DateTime StartDate, DateTime EndDate)
+        public IActionResult RentCar(int carId, string sdate, string edate, int deneme)
         {
             var userIdClaim = HttpContext.User.FindFirst("userId")?.Value;
             if (userIdClaim == null || !int.TryParse(userIdClaim, out int userId))
@@ -131,17 +165,32 @@ namespace RentACar.Controllers
                 return NotFound();
             }
 
+            // girilen tarihler arasında kiralama varsa uyarı vermesi için 
+            //var existingRentals = _rentalRepository.GetAll()
+            //    .Where(r => r.CarId == carId &&
+            //           ((r.StartDate < EndDate && r.EndDate > StartDate) ||
+            //            (r.StartDate == StartDate && r.EndDate == EndDate)))
+            //    .ToList();
+
+            //if (existingRentals.Any())
+            //{
+            //    TempData["Error"] = "The car is already rented for the selected dates.";
+            //    ViewBag.CarId = carId;
+            //    ViewBag.CarName = car.CarName;
+            //    ViewBag.CarBrandName = car.CarBrandName;
+            //    return View();
+            //}
+
             var urental = new Rental
             {
                 CarId = car.Id,
                 CarName = car.CarName,
                 CarBrandName = car.CarBrandName,
                 UserId = userId,
-                StartDate = StartDate,
-                EndDate = EndDate,
+                StartDate = DateTime.Parse(sdate),
+                EndDate = DateTime.Parse(edate),
                 CarPrice = car.CarPrice
             };
-
 
             urental.CalculateRentalPrice(car.CarPrice);
 
@@ -153,7 +202,6 @@ namespace RentACar.Controllers
 
             foreach (var rental in userRentals)
             {
-               
                 if (rental.StartDate >= now)
                 {
                     var rentalCar = _carsRepository.Get(l => l.Id == rental.CarId);
@@ -169,7 +217,6 @@ namespace RentACar.Controllers
             TempData["Success"] = "Car rented successfully!";
             return RedirectToAction("RentList");
         }
-
 
 
 

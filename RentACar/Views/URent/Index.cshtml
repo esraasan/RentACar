@@ -18,11 +18,25 @@
 <div class="container">
     <h1 class="my-4">@ViewData["Title"]</h1>
 
-    <div class="form-group">
-        <label for="brandFilter">Filter</label>
-        <select id="brandFilter" class="form-control">
-            <option value="">All Brands</option>
-            @foreach (var brand in Model.Select(c => c.CarBrandName).Distinct())
+    <div class="mb-4">
+        <form method="get" asp-controller="URent" asp-action="Index">
+            <div class="form-group">
+                <label for="startDate">Start Date:</label>
+                <input type="date" id="startDate" name="startDate" class="form-control" value="@ViewData["StartDate"]">
+            </div>
+            <div class="form-group">
+                <label for="endDate">End Date:</label>
+                <input type="date" id="endDate" name="endDate" class="form-control" value="@ViewData["EndDate"]">
+            </div>
+            <button type="submit" class="btn btn-secondary mt-2">Filter</button>
+        </form>
+    </div>
+
+    <div class="mb-4">
+        <label for="brandFilter">Filter by Brand:</label>
+        <select id="brandFilter" class="form-control" onchange="filterByBrand()">
+            <option value="all">All Brands</option>
+            @foreach (var brand in Model.Select(car => car.CarBrandName).Distinct())
             {
                 <option value="@brand">@brand</option>
             }
@@ -31,10 +45,10 @@
 
     @if (Model.Any())
     {
-        <div class="row">
+        <div class="row" id="carContainer">
             @foreach (var car in Model)
             {
-                <div class="col-md-6 mb-2" data-brand="@car.CarBrandName">
+                <div class="col-md-8 mb-4 car-item" data-brand="@car.CarBrandName">
                     <div class="card2 h-100">
                         <img src="@car.ImgUrl" class="card-img-top" alt="@car.CarName">
                         <div class="card-body">
@@ -51,7 +65,7 @@
                             }
                             else
                             {
-                                <a asp-controller="URent" asp-action="RentCar" asp-route-carId="@car.Id" class="btn btn-secondary btn-block">Rent</a>
+                                <a asp-controller="URent" asp-action="RentCar" asp-route-carId="@car.Id" asp-route-startDate="@ViewBag.StartDate" asp-route-endDate="@ViewBag.EndDate" class="btn btn-secondary btn-block">Rent</a>
                             }
                         </div>
                     </div>
@@ -66,15 +80,16 @@
 </div>
 
 <script>
-    $(document).ready(function () {
-        $('#brandFilter').change(function () {
-            var selectedBrand = $(this).val();
-            $('.card2').hide();
-            if (selectedBrand === '') {
-                $('.card2').show();
+    function filterByBrand() {
+        var selectedBrand = document.getElementById("brandFilter").value;
+        var carItems = document.querySelectorAll(".car-item");
+
+        carItems.forEach(function (carItem) {
+            if (selectedBrand === "all" || carItem.getAttribute("data-brand") === selectedBrand) {
+                carItem.style.display = "block";
             } else {
-                $('.card[data-brand="' + selectedBrand + '"]').show();
+                carItem.style.display = "none";
             }
         });
-    });
+    }
 </script>
